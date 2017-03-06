@@ -1,0 +1,28 @@
+<html>
+<head>
+  <title>test Ws mqtt.js</title>
+	<script src="./node_modules/mqtt/browserMqtt.js"></script>
+</head>
+<body>
+	<div id="messages"></div>	
+	<script>
+    var client = mqtt.connect('ws:127.0.0.1:3001') // you add a ws:// url here
+    client.subscribe("mqtt/demo")
+    client.subscribe("presence")
+
+    client.on("message", function (topic, payload) {
+      console.log([topic, payload].join(": "))
+  		var msgDiv = document.getElementById("messages");
+  		var msg = document.createElement("p");
+  		msg.appendChild(document.createTextNode([topic, payload].join(": ")));
+  		msgDiv.appendChild(msg);
+      // client.end()
+    })
+
+    client.publish("presence", "this is from the browser")
+  </script>
+  <script>
+
+  </script>
+</body>
+</html>
