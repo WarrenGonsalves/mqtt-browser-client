@@ -4,9 +4,11 @@
 	<script src="./node_modules/mqtt/browserMqtt.js"></script>
 </head>
 <body>
+  <input id="msgText" type="text" name="message_input">
+  <input type="button" name="inputBtn" onclick="sendMessage();" value="send">
 	<div id="messages"></div>	
 	<script>
-    var client = mqtt.connect('ws:127.0.0.1:3001') // you add a ws:// url here
+    var client = mqtt.connect('ws:ec2-52-37-200-128.us-west-2.compute.amazonaws.com:3001') // you add a ws:// url here
     client.subscribe("mqtt/demo")
     client.subscribe("presence")
 
@@ -20,6 +22,22 @@
     })
 
     client.publish("presence", "this is from the browser")
+
+    document.getElementById("msgText")
+      .addEventListener("keyup", function(event) {
+      event.preventDefault();
+      if (event.keyCode == 13) {
+        document.getElementById("send").click();
+      }
+    });
+
+    function sendMessage () {
+      event.preventDefault();
+      var text = document.getElementById("msgText").value;
+      client.publish("presence", text);
+
+      document.getElementById("msgText").value = "";
+    }
   </script>
   <script>
 
